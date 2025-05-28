@@ -1,1 +1,0 @@
-/nix/store/8zlrggpa17k8akk049y19140z004am0l-gcc-wrapper-14.2.0/bin/g++ -O3 -DNDEBUG CMakeFiles/plazza.dir/src/Plazza.cpp.o CMakeFiles/plazza.dir/src/core/Pizza.cpp.o CMakeFiles/plazza.dir/src/kitchen/Kitchen.cpp.o CMakeFiles/plazza.dir/src/main.cpp.o CMakeFiles/plazza.dir/src/reception/Reception.cpp.o -o /home/dawoox/CLionProjects/plazza/plazza

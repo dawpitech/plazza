@@ -1,3 +1,0 @@
-/home/dawoox/CLionProjects/plazza/build/CMakeFiles/plazza.dir
-/home/dawoox/CLionProjects/plazza/build/CMakeFiles/edit_cache.dir
-/home/dawoox/CLionProjects/plazza/build/CMakeFiles/rebuild_cache.dir

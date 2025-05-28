@@ -1,9 +1,0 @@
-# ninja log v6
-258	319	1748259541156746577	/home/dawoox/CLionProjects/plazzaplazza	cfd3b697b49518e4
-1	258	1748259540899748940	CMakeFiles/plazza.dir/src/Plazza.cpp.o	94fe7e38f9b0c25
-1	149	1748259540899748940	CMakeFiles/plazza.dir/src/main.cpp.o	c73a0d04a6c32a95
-0	21	1748274839072151833	build.ninja	7403a2491053a578
-1	67	1748259555624613670	/home/dawoox/CLionProjects/plazza/plazza	34e60239413de19d
-1	353	1748274848344340729	CMakeFiles/plazza.dir/src/Plazza.cpp.o	15e709cdd1fb784c
-2	377	1748274848345340729	CMakeFiles/plazza.dir/src/main.cpp.o	8c1b965f38d598d0
-377	445	1748274848720340957	/home/dawoox/CLionProjects/plazza/plazza	a9695bf8fa86fd0
