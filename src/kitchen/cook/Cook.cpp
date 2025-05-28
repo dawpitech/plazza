@@ -48,6 +48,25 @@ void plazza::kitchen::Cook::letHimCook()
         }
         core::Pizza pizza = *maybePizza;
         if (debug::DEBUG_MODE)
+            std::cout << debug::getTS() << "[C?] Try to cook pizza: " << pizza << std::endl;
+
+        for (const auto ingredient : pizza.getIngredients()) {
+            while (true)
+            {
+                {
+                    std::lock_guard lock(self._ingredientMutex);
+                    if (self._ingredientStock.at(ingredient) > 0) {
+                        self._ingredientStock.at(ingredient) -= 1;
+                        break;
+                    }
+                }
+                if (debug::DEBUG_MODE)
+                    std::cout << debug::getTS() << "[C?] Waiting on ingredients..." << std::endl;
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            }
+        }
+
+        if (debug::DEBUG_MODE)
             std::cout << debug::getTS() << "[C?] Cooking pizza: " << pizza << std::endl;
         std::this_thread::sleep_for(pizza.getCookingTime() * self._cookingTimeFactor);
         if (debug::DEBUG_MODE)

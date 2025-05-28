@@ -32,12 +32,15 @@ namespace plazza::kitchen
 
         private:
             static constexpr unsigned int TIMEOUT = 5;
+            static constexpr unsigned int MAX_STOCK_QUANTITY = 1;
 
             const int _id;
             const std::unique_ptr<ipc::TuyauAPizza> pipe;
             const float _cookingTimeFactor;
             const unsigned int _numberOfCooks;
             const unsigned int _refillDelay;
+
+            void refillStock();
 
             std::vector<std::unique_ptr<Cook>> _cooks;
             utils::ThreadSafeQueue<core::Pizza> _waitingOrders;

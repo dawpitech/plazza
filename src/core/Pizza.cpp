@@ -63,6 +63,39 @@ plazza::core::Pizza::Size plazza::core::Pizza::getSize(const std::string& size)
 const void* plazza::core::Pizza::pack() const { return this; }
 void plazza::core::Pizza::unpack(const void* data) { std::memcpy(this, data, sizeof(Pizza)); }
 
+std::vector<plazza::core::Ingredients> plazza::core::Pizza::getIngredients() const
+{
+    switch (this->type)
+    {
+        case Type::Regina: return {
+                Ingredients::Dough,
+                Ingredients::Tomato,
+                Ingredients::Gruyere,
+            };
+        case Type::Margarita: return {
+                Ingredients::Dough,
+                Ingredients::Tomato,
+                Ingredients::Gruyere,
+                Ingredients::Ham,
+                Ingredients::Mushrooms,
+            };
+        case Type::Americana: return {
+                Ingredients::Dough,
+                Ingredients::Tomato,
+                Ingredients::Gruyere,
+                Ingredients::Steak,
+            };
+        case Type::Fantasia: return {
+                Ingredients::Dough,
+                Ingredients::Tomato,
+                Ingredients::Eggplant,
+                Ingredients::GoatCheese,
+                Ingredients::ChiefLove
+            };
+        default: throw std::out_of_range("Invalid pizza type");
+    }
+}
+
 std::chrono::duration<long, std::ratio<1, 1000>> plazza::core::Pizza::getCookingTime() const
 {
     switch (this->type)

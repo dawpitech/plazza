@@ -24,15 +24,15 @@ plazza::kitchen::Kitchen::Kitchen(const int id, std::unique_ptr<ipc::TuyauAPizza
     , _numberOfCooks(numberOfCooks)
     ,  _refillDelay(refillDelay)
 {
-    this->_ingredientStock.insert(std::make_pair(core::Ingredients::Dough, 5));
-    this->_ingredientStock.insert(std::make_pair(core::Ingredients::Tomato, 5));
-    this->_ingredientStock.insert(std::make_pair(core::Ingredients::Gruyere, 5));
-    this->_ingredientStock.insert(std::make_pair(core::Ingredients::Ham, 5));
-    this->_ingredientStock.insert(std::make_pair(core::Ingredients::Mushrooms, 5));
-    this->_ingredientStock.insert(std::make_pair(core::Ingredients::Steak, 5));
-    this->_ingredientStock.insert(std::make_pair(core::Ingredients::Eggplant, 5));
-    this->_ingredientStock.insert(std::make_pair(core::Ingredients::GoatCheese, 5));
-    this->_ingredientStock.insert(std::make_pair(core::Ingredients::ChiefLove, 5));
+    this->_ingredientStock.insert(std::make_pair(core::Ingredients::Dough, MAX_STOCK_QUANTITY));
+    this->_ingredientStock.insert(std::make_pair(core::Ingredients::Tomato, MAX_STOCK_QUANTITY));
+    this->_ingredientStock.insert(std::make_pair(core::Ingredients::Gruyere, MAX_STOCK_QUANTITY));
+    this->_ingredientStock.insert(std::make_pair(core::Ingredients::Ham, MAX_STOCK_QUANTITY));
+    this->_ingredientStock.insert(std::make_pair(core::Ingredients::Mushrooms, MAX_STOCK_QUANTITY));
+    this->_ingredientStock.insert(std::make_pair(core::Ingredients::Steak, MAX_STOCK_QUANTITY));
+    this->_ingredientStock.insert(std::make_pair(core::Ingredients::Eggplant, MAX_STOCK_QUANTITY));
+    this->_ingredientStock.insert(std::make_pair(core::Ingredients::GoatCheese, MAX_STOCK_QUANTITY));
+    this->_ingredientStock.insert(std::make_pair(core::Ingredients::ChiefLove, MAX_STOCK_QUANTITY));
     for (unsigned int i = 0; i < this->_numberOfCooks; i++)
         this->_cooks.emplace_back(std::make_unique<Cook>(
             this->_ingredientStock,
@@ -49,8 +49,8 @@ void plazza::kitchen::Kitchen::processEntryPoint()
         .events = POLLIN,
         .revents = 0,
     };
-    auto lastOrderInTime = std::chrono::system_clock::now();
-
+    auto timeAtLastOrder = std::chrono::system_clock::now();
+    auto timeAtLastRefill = timeAtLastOrder;
 
     if (debug::DEBUG_MODE)
         std::cout << debug::getTS() << "[K" << this->_id << "] Kitchen process entry" << std::endl;
@@ -63,13 +63,17 @@ void plazza::kitchen::Kitchen::processEntryPoint()
         const int pollRet = poll(&pfd, 1, 0);
 
         const auto now = std::chrono::system_clock::now();
+
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeAtLastOrder).count() > this->_refillDelay)
+            this->refillStock();
+
         if (pollRet < 0) {
             std::cerr << debug::getTS() << "[K" << this->_id << "] Poll error, shutting down." << std::endl;
             break;
         }
         if (pollRet == 0)
         {
-            if (std::chrono::duration_cast<std::chrono::seconds>(now - lastOrderInTime).count() > TIMEOUT) {
+            if (std::chrono::duration_cast<std::chrono::seconds>(now - timeAtLastOrder).count() > TIMEOUT) {
                 if (debug::DEBUG_MODE)
                     std::cout << debug::getTS() << "[K" << this->_id << "] No pizza received for " << TIMEOUT << " seconds, shutting down." << std::endl;
                 break;
@@ -83,7 +87,7 @@ void plazza::kitchen::Kitchen::processEntryPoint()
             continue;
         }
 
-        lastOrderInTime = std::chrono::system_clock::now();
+        timeAtLastOrder = std::chrono::system_clock::now();
         try {
             core::Pizza pizza = pipe->receivePizza();
             if (debug::DEBUG_MODE)
@@ -97,4 +101,17 @@ void plazza::kitchen::Kitchen::processEntryPoint()
     }
     if (debug::DEBUG_MODE)
         std::cout << debug::getTS() << "[K" << this->_id << "] Kitchen process exiting" << std::endl;
+}
+
+void plazza::kitchen::Kitchen::refillStock()
+{
+    this->_ingredientStock.at(core::Ingredients::Dough) = MAX_STOCK_QUANTITY;
+    this->_ingredientStock.at(core::Ingredients::Tomato) = MAX_STOCK_QUANTITY;
+    this->_ingredientStock.at(core::Ingredients::Gruyere) = MAX_STOCK_QUANTITY;
+    this->_ingredientStock.at(core::Ingredients::Ham) = MAX_STOCK_QUANTITY;
+    this->_ingredientStock.at(core::Ingredients::Mushrooms) = MAX_STOCK_QUANTITY;
+    this->_ingredientStock.at(core::Ingredients::Steak) = MAX_STOCK_QUANTITY;
+    this->_ingredientStock.at(core::Ingredients::Eggplant) = MAX_STOCK_QUANTITY;
+    this->_ingredientStock.at(core::Ingredients::GoatCheese) = MAX_STOCK_QUANTITY;
+    this->_ingredientStock.at(core::Ingredients::ChiefLove) = MAX_STOCK_QUANTITY;
 }
