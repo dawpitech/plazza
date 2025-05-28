@@ -25,7 +25,8 @@ namespace plazza::kitchen
             explicit Cook(std::unordered_map<core::Ingredients, unsigned int>& ingredientStock,
                           std::mutex& ingredientMtx,
                           utils::ThreadSafeQueue<core::Pizza>& waitingOrders,
-                          utils::ThreadSafeQueue<core::Pizza>& finishedOrders);
+                          utils::ThreadSafeQueue<core::Pizza>& finishedOrders,
+                          float cookingTimeFactor);
             ~Cook() = default;
 
             void letHimCook();
@@ -36,6 +37,7 @@ namespace plazza::kitchen
             std::mutex& _ingredientMutex;
             utils::ThreadSafeQueue<core::Pizza>& _waitingOrders;
             utils::ThreadSafeQueue<core::Pizza>& _finishedOrders;
+            const float _cookingTimeFactor;
 
             [[noreturn]] static void threadEntryPoint(Cook& self);
     };

@@ -38,7 +38,8 @@ plazza::kitchen::Kitchen::Kitchen(const int id, std::unique_ptr<ipc::TuyauAPizza
             this->_ingredientStock,
             this->_ingredientMutex,
             this->_waitingOrders,
-            this->_finishedOrders));
+            this->_finishedOrders,
+            this->_cookingTimeFactor));
 }
 
 void plazza::kitchen::Kitchen::processEntryPoint()
@@ -78,6 +79,7 @@ void plazza::kitchen::Kitchen::processEntryPoint()
                 if (debug::DEBUG_MODE)
                     std::cout << debug::getTS() << "[K" << this->_id << "] Pizza cooked and sent back!" << std::endl;
             }
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
             continue;
         }
 

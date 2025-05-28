@@ -41,6 +41,8 @@ void plazza::Reception::checkForCookedPizzas(const int kitchenPipeFD)
             kitchen.pendingPizzas.erase(kitchen.pendingPizzas.begin());
             if (debug::DEBUG_MODE)
                 std::cout << debug::getTS() << "[R-] Pizza order completed, here is your " << cooked << std::endl;
+            else
+                std::cout << "\n" << "Here is your: " << cooked << " freshly cooked!" << "\n$ > " << std::flush;
             return;
         } catch ([[maybe_unused]] ipc::TuyauAPizza::KitchenClosedException& kce) {
             this->updateKitchenList();
@@ -71,7 +73,7 @@ void plazza::Reception::printKitchenStatus()
     if (this->_kitchens.empty())
     {
         if (debug::DEBUG_MODE)
-            std::cout << debug::getTS() << "[-R] ";
+            std::cout << debug::getTS() << "[R-] ";
         std::cout << "No kitchen currently open" << std::endl;
     }
 }

@@ -7,7 +7,9 @@
 
 #pragma once
 
+#include <chrono>
 #include <iomanip>
+#include <iostream>
 
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"      /* Black */
@@ -29,7 +31,7 @@
 
 namespace plazza::debug
 {
-    static bool DEBUG_MODE = false;
+    extern bool DEBUG_MODE;
 
     static void printTS()
     {
