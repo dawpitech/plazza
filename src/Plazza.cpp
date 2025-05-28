@@ -104,6 +104,7 @@ void plazza::Plazza::run()
         }
         // If ret == 0: timeout, loop again (can add a small sleep if you want)
         // No need for checkForCookedPizzas() anymore, it's inline above
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
 }
 
