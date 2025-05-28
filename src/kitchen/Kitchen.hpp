@@ -1,7 +1,16 @@
+/*
+** EPITECH PROJECT, 2025
+** Kitchen
+** File description:
+** Kitchen.hpp
+*/
+
 #pragma once
-#include <mutex>
+
 #include <memory>
-#include "IPC/PizzaPipe.hpp"
+#include <mutex>
+
+#include "IPC/TuyauAPizza.hpp"
 
 namespace plazza::kitchen
 {
@@ -9,14 +18,15 @@ namespace plazza::kitchen
     {
         public:
             Kitchen() = delete;
-            Kitchen(const int id, std::unique_ptr<plazza::ipc::PizzaPipe> p)
-                : _id(id), pipe(std::move(p)) {}
+            Kitchen(const int id, std::unique_ptr<ipc::TuyauAPizza> p, const float cookingTimeFactor)
+                : _id(id), pipe(std::move(p)), _cookingTimeFactor(cookingTimeFactor) {}
             ~Kitchen() = default;
 
             void processEntryPoint();
 
         private:
             int _id;
-            std::unique_ptr<plazza::ipc::PizzaPipe> pipe;
+            std::unique_ptr<ipc::TuyauAPizza> pipe;
+            float _cookingTimeFactor;
     };
 }

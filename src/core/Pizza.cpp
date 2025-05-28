@@ -5,6 +5,8 @@
 ** Pizza.cpp
 */
 
+#include <cstring>
+
 #include "Pizza.hpp"
 
 std::string plazza::core::Pizza::getTypeName(const Type type)
@@ -56,4 +58,19 @@ plazza::core::Pizza::Size plazza::core::Pizza::getSize(const std::string& size)
     if (size == "XXL")
         return Size::XXL;
     throw std::out_of_range("Pizza size " + size + " unknown");
+}
+
+const void* plazza::core::Pizza::pack() const { return this; }
+void plazza::core::Pizza::unpack(const void* data) { std::memcpy(this, data, sizeof(Pizza)); }
+
+std::chrono::duration<long, std::ratio<1, 1000>> plazza::core::Pizza::getCookingTime() const
+{
+    switch (this->type)
+    {
+        case Type::Regina: return std::chrono::seconds(1);
+        case Type::Margarita: return std::chrono::seconds(2);
+        case Type::Americana: return std::chrono::seconds(2);
+        case Type::Fantasia: return std::chrono::seconds(4);
+        default: throw std::out_of_range("Invalid pizza type");
+    }
 }

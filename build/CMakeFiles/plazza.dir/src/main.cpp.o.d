@@ -252,4 +252,5 @@ CMakeFiles/plazza.dir/src/main.cpp.o: \
  /nix/store/89d7lpb1vygphr2cyna88rgr93fm8xqz-gcc-14.2.0/include/c++/14.2.0/limits \
  /nix/store/89d7lpb1vygphr2cyna88rgr93fm8xqz-gcc-14.2.0/include/c++/14.2.0/ctime \
  /nix/store/89d7lpb1vygphr2cyna88rgr93fm8xqz-gcc-14.2.0/include/c++/14.2.0/bits/parse_numbers.h \
- /home/dawoox/CLionProjects/plazza/src/core/Ingredients.hpp
+ /home/dawoox/CLionProjects/plazza/src/core/Ingredients.hpp \
+ /home/dawoox/CLionProjects/plazza/src/reception/Reception.hpp

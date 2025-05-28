@@ -1,48 +1,58 @@
+/*
+** EPITECH PROJECT, 2025
+** Kitchen
+** File description:
+** Kitchen.cpp
+*/
+
+#include <iomanip>
 #include <iostream>
-#include <thread>
-#include <chrono>
 #include <poll.h>
+#include <thread>
+
 #include "Kitchen.hpp"
 #include "core/Pizza.hpp"
+#include "utils/Debug.hpp"
 
 void plazza::kitchen::Kitchen::processEntryPoint()
 {
-    std::cout << "[K" << this->_id << "] Process entry" << std::endl;
+    if (debug::DEBUG_MODE)
+        std::cout << debug::getTS() << "[K" << this->_id << "] Kitchen process entry" << std::endl;
 
-    // Get the read end of the pizza order pipe
-    int pizza_fd = pipe->shellToKitchen[0];
+    pollfd pfd = {
+        .fd = pipe->shellToKitchen[0],
+        .events = POLLIN,
+        .revents = 0,
+    };
 
     while (true) {
-        // Poll for up to 5 seconds for a new pizza order
-        struct pollfd pfd;
-        pfd.fd = pizza_fd;
-        pfd.events = POLLIN;
         pfd.revents = 0;
-        int ret = poll(&pfd, 1, 5000); // 5000ms timeout
+        const int pollRet = poll(&pfd, 1, 5000);
 
-        if (ret == 0) {
-            // Timeout: no pizza order received after 5 seconds
-            std::cout << "[K" << this->_id << "] No pizza received for 5 seconds, shutting down." << std::endl;
+        if (pollRet == 0) {
+            if (debug::DEBUG_MODE)
+                std::cout << debug::getTS() << "[K" << this->_id << "] No pizza received for 5 seconds, shutting down." << std::endl;
             break;
         }
-        if (ret < 0) {
-            std::cerr << "[K" << this->_id << "] Poll error, shutting down." << std::endl;
+        if (pollRet < 0) {
+            std::cerr << debug::getTS() << "[K" << this->_id << "] Poll error, shutting down." << std::endl;
             break;
         }
-        if (pfd.revents & POLLIN) {
-            try {
-                core::Pizza pizza = pipe->receivePizza();
-                std::cout << "[K" << this->_id << "] Received pizza: " << pizza << std::endl;
+        try {
+            core::Pizza pizza = pipe->receivePizza();
+            if (debug::DEBUG_MODE)
+                std::cout << debug::getTS() << "[K" << this->_id << "] Received pizza: " << pizza << std::endl;
 
-                // Simulate cooking
-                std::this_thread::sleep_for(std::chrono::seconds(2));
-                pipe->sendCookedPizza(pizza);
-                std::cout << "[K" << this->_id << "] Pizza cooked and sent back!" << std::endl;
-            } catch (const std::exception& e) {
-                std::cerr << "[K" << _id << "] Error: " << e.what() << std::endl;
-                break;
-            }
+            std::this_thread::sleep_for(pizza.getCookingTime() * this->_cookingTimeFactor);
+
+            pipe->sendCookedPizza(pizza);
+                if (debug::DEBUG_MODE)
+                    std::cout << debug::getTS() << "[K" << this->_id << "] Pizza cooked and sent back!" << std::endl;
+        } catch (const std::exception& e) {
+            std::cerr << "[K" << _id << "] Error: " << e.what() << std::endl;
+            break;
         }
     }
-    std::cout << "[K" << this->_id << "] Process returning" << std::endl;
+    if (debug::DEBUG_MODE)
+        std::cout << debug::getTS() << "[K" << this->_id << "] Kitchen process exiting" << std::endl;
 }

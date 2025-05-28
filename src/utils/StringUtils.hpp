@@ -22,12 +22,12 @@ namespace plazza::utils
 
                 for (size_t i = 0; i < result.length(); ++i) {
                     if (newWord && std::isalpha(result[i])) {
-                        result[i] = std::toupper(result[i]);
+                        result[i] = static_cast<char>(std::toupper(result[i]));
                         newWord = false;
                     } else if (result[i] == ' ') {
                         newWord = true;
                     } else {
-                        result[i] = std::tolower(result[i]);
+                        result[i] = static_cast<char>(std::tolower(result[i]));
                     }
                 }
                 return result;

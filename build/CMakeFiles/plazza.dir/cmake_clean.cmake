@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/plazza.dir/src/kitchen/Kitchen.cpp.o.d"
   "CMakeFiles/plazza.dir/src/main.cpp.o"
   "CMakeFiles/plazza.dir/src/main.cpp.o.d"
+  "CMakeFiles/plazza.dir/src/reception/Reception.cpp.o"
+  "CMakeFiles/plazza.dir/src/reception/Reception.cpp.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

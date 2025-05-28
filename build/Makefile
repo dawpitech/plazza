@@ -225,6 +225,30 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/plazza.dir/build.make CMakeFiles/plazza.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/reception/Reception.o: src/reception/Reception.cpp.o
+.PHONY : src/reception/Reception.o
+
+# target to build an object file
+src/reception/Reception.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/plazza.dir/build.make CMakeFiles/plazza.dir/src/reception/Reception.cpp.o
+.PHONY : src/reception/Reception.cpp.o
+
+src/reception/Reception.i: src/reception/Reception.cpp.i
+.PHONY : src/reception/Reception.i
+
+# target to preprocess a source file
+src/reception/Reception.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/plazza.dir/build.make CMakeFiles/plazza.dir/src/reception/Reception.cpp.i
+.PHONY : src/reception/Reception.cpp.i
+
+src/reception/Reception.s: src/reception/Reception.cpp.s
+.PHONY : src/reception/Reception.s
+
+# target to generate assembly for a file
+src/reception/Reception.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/plazza.dir/build.make CMakeFiles/plazza.dir/src/reception/Reception.cpp.s
+.PHONY : src/reception/Reception.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -246,6 +270,9 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/reception/Reception.o"
+	@echo "... src/reception/Reception.i"
+	@echo "... src/reception/Reception.s"
 .PHONY : help
 
 

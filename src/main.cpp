@@ -7,8 +7,6 @@
 
 #include "Plazza.hpp"
 
-#include "core/Pizza.hpp"
-
 int main(const int argc, const char **argv) {
     plazza::Plazza plazza{};
 
