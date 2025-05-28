@@ -34,11 +34,15 @@ namespace plazza
             };
 
             Reception() = delete;
-            explicit Reception(const float cookingTimeFactor)
-                : COOKING_TIME_FACTOR(cookingTimeFactor) {}
+            explicit Reception(const float cookingTimeFactor,
+                const unsigned int numberOfCooks,
+                const unsigned int refillDelay)
+                : _uCOOKING_TIME_FACTOR(cookingTimeFactor)
+                , _uNUMBER_OF_COOKS(numberOfCooks)
+                , _uREFILL_DELAY(refillDelay) {}
             ~Reception() = default;
 
-            std::vector<int> getKitchenPipeFD() const;
+            [[nodiscard]] std::vector<int> getKitchenPipeFD() const;
 
             void orderPizza(core::Pizza pizza);
             void checkForCookedPizzas(int kitchenPipeFD);
@@ -47,8 +51,9 @@ namespace plazza
             void updateKitchenList();
 
         private:
-            const float COOKING_TIME_FACTOR;
-            static constexpr int SLOTS = 2;
+            const float _uCOOKING_TIME_FACTOR;
+            const unsigned int _uNUMBER_OF_COOKS;
+            const unsigned int _uREFILL_DELAY;
 
             int newKitchenID = 0;
             std::vector<KitchenData> _kitchens;

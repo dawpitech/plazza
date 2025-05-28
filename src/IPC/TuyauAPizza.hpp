@@ -91,7 +91,6 @@ namespace plazza::ipc
             }
             // ReSharper disable once CppMemberFunctionMayBeConst
             void closeKitchenSidePipes() {
-                // Close kitchen's ends in parent (shell)
                 close(shellToKitchen[0]);
                 close(kitchenToShell[1]);
             }

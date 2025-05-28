@@ -79,7 +79,7 @@ void plazza::Reception::printKitchenStatus()
 plazza::Reception::KitchenData& plazza::Reception::getNextKitchen()
 {
     for (auto& kitchen : this->_kitchens) {
-        if (kitchen.pendingPizzas.size() >= this->SLOTS)
+        if (kitchen.pendingPizzas.size() == this->_uNUMBER_OF_COOKS * 2)
             continue;
         return kitchen;
     }
@@ -110,7 +110,7 @@ void plazza::Reception::launchNewKitchen()
 
     if (pid == 0) {
         pipe->closeReceptionSidePipes();
-        kitchen::Kitchen kitchen(kitchenID, std::move(pipe), this->COOKING_TIME_FACTOR);
+        kitchen::Kitchen kitchen(kitchenID, std::move(pipe), this->_uCOOKING_TIME_FACTOR, this->_uNUMBER_OF_COOKS, this->_uREFILL_DELAY);
         kitchen.processEntryPoint();
         exit(0);
     }

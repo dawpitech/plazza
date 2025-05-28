@@ -9,8 +9,11 @@
 
 #include <memory>
 #include <mutex>
+#include <unordered_map>
 
+#include "cook/Cook.hpp"
 #include "IPC/TuyauAPizza.hpp"
+#include "utils/ThreadSafeQueue.hpp"
 
 namespace plazza::kitchen
 {
@@ -18,15 +21,28 @@ namespace plazza::kitchen
     {
         public:
             Kitchen() = delete;
-            Kitchen(const int id, std::unique_ptr<ipc::TuyauAPizza> p, const float cookingTimeFactor)
-                : _id(id), pipe(std::move(p)), _cookingTimeFactor(cookingTimeFactor) {}
+            Kitchen(int id, std::unique_ptr<ipc::TuyauAPizza> p,
+                float cookingTimeFactor,
+                unsigned int numberOfCooks,
+                unsigned int refillDelay);
+
             ~Kitchen() = default;
 
             void processEntryPoint();
 
         private:
-            int _id;
-            std::unique_ptr<ipc::TuyauAPizza> pipe;
-            float _cookingTimeFactor;
+            static constexpr unsigned int TIMEOUT = 5;
+
+            const int _id;
+            const std::unique_ptr<ipc::TuyauAPizza> pipe;
+            const float _cookingTimeFactor;
+            const unsigned int _numberOfCooks;
+            const unsigned int _refillDelay;
+
+            std::vector<std::unique_ptr<Cook>> _cooks;
+            utils::ThreadSafeQueue<core::Pizza> _waitingOrders;
+            utils::ThreadSafeQueue<core::Pizza> _finishedOrders;
+            std::unordered_map<core::Ingredients, unsigned int> _ingredientStock;
+            std::mutex _ingredientMutex;
     };
 }

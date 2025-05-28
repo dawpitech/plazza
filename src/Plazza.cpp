@@ -57,7 +57,8 @@ int plazza::Plazza::parseLaunchArgs(const int argc, const char** argv)
 void plazza::Plazza::run()
 {
     initChildWatcher();
-    this->_reception = std::make_unique<Reception>(this->cookingTimeFactor);
+    this->_reception = std::make_unique<Reception>
+        (this->cookingTimeFactor, this->cooksPerKitchen, this->refillDelay);
     if (!debug::DEBUG_MODE)
         std::cout << "$ > " << std::flush;
     while (this->running) {
