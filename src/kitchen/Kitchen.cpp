@@ -6,26 +6,28 @@
 */
 
 #include <iostream>
-#include <bits/this_thread_sleep.h>
-
+#include <thread>
+#include <chrono>
 #include "Kitchen.hpp"
 #include "core/Pizza.hpp"
-#include "IPC/Chausette.hpp"
 
 void plazza::kitchen::Kitchen::processEntryPoint()
 {
     std::cout << "[K" << this->_id << "] Process entry" << std::endl;
 
-    IpcUnixSocket socket("/tmp/plazza" + this->_id, IpcUnixSocket::Mode::Client);
+    while (true) {
+        try {
+            core::Pizza pizza = pipe->receivePizza();
+            std::cout << "[K" << this->_id << "] Received pizza: " << pizza << std::endl;
 
-    char buf[sizeof(int32_t) * 2];
-    const ssize_t n = socket.receiveBlocking(buf, sizeof(buf));
-    if (n == sizeof(buf)) {
-        core::Pizza pizza;
-        pizza.unpack(buf);
-
-        std::cout << "Received pizza" << pizza << std::endl;
+            // Simulate cooking
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+            pipe->sendCookedPizza(pizza);
+            std::cout << "[K" << this->_id << "] Pizza cooked and sent back!" << std::endl;
+        } catch (const std::exception& e) {
+            std::cerr << "[K" << _id << "] Error: " << e.what() << std::endl;
+            break;
+        }
     }
-
     std::cout << "[K" << this->_id << "] Process returning" << std::endl;
 }

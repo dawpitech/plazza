@@ -2,10 +2,10 @@
 
 #include <map>
 #include <string>
-#include <thread>
 #include <vector>
+#include <memory>
 #include <unistd.h>
-#include "IPC/Chausette.hpp"
+#include "IPC/PizzaPipe.hpp"
 
 namespace plazza
 {
@@ -52,19 +52,27 @@ namespace plazza
             {
                 public:
                     pid_t kitchenPID;
-                    IpcUnixSocket kitchenSocket;
+                    std::unique_ptr<plazza::ipc::PizzaPipe> pipe;
 
-                    KitchenData(pid_t pid, IpcUnixSocket&& sock)
-                        : kitchenPID(pid), kitchenSocket(std::move(sock)) {}
-
+                    KitchenData(pid_t pid, std::unique_ptr<plazza::ipc::PizzaPipe>&& p);
                     // Move only
-                    KitchenData(KitchenData&&) = default;
-                    KitchenData& operator=(KitchenData&&) = default;
+                    KitchenData(KitchenData&&) noexcept;
+                    KitchenData& operator=(KitchenData&&) noexcept;
                     KitchenData(const KitchenData&) = delete;
                     KitchenData& operator=(const KitchenData&) = delete;
             };
 
             std::vector<KitchenData> _kitchens;
+
+            // Each pizza being cooked
+            struct PendingPizza {
+                pid_t kitchenPID;
+                core::Pizza pizza;
+            };
+            // For each kitchen, the pizzas it's currently cooking
+            std::map<pid_t, std::vector<core::Pizza>> _pendingPizzasPerKitchen;
+
+            void checkForCookedPizzas();
 
             void runCLI();
     };
