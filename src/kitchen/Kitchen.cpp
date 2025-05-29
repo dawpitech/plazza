@@ -64,8 +64,10 @@ void plazza::kitchen::Kitchen::processEntryPoint()
 
         const auto now = std::chrono::system_clock::now();
 
-        if (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeAtLastOrder).count() > this->_refillDelay)
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeAtLastRefill).count() > this->_refillDelay) {
             this->refillStock();
+            timeAtLastRefill = std::chrono::system_clock::now();
+        }
 
         if (pollRet < 0) {
             std::cerr << debug::getTS() << "[K" << this->_id << "] Poll error, shutting down." << std::endl;
