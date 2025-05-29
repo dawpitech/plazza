@@ -80,13 +80,19 @@ void plazza::Reception::printKitchenStatus()
 
 plazza::Reception::KitchenData& plazza::Reception::getNextKitchen()
 {
-    for (auto& kitchen : this->_kitchens) {
-        if (kitchen.pendingPizzas.size() == this->_uNUMBER_OF_COOKS * 2)
-            continue;
-        return kitchen;
+    if (this->_kitchens.empty()) {
+        this->launchNewKitchen();
+        return this->_kitchens.back();
     }
-    this->launchNewKitchen();
-    return this->_kitchens.back();
+    auto bestKitchen = &this->_kitchens.back();
+    for (auto& kitchen : this->_kitchens)
+        if (kitchen.pendingPizzas.size() < bestKitchen->pendingPizzas.size())
+            bestKitchen = &kitchen;
+    if (bestKitchen->pendingPizzas.size() >= this->_uNUMBER_OF_COOKS * 2) {
+        this->launchNewKitchen();
+        return this->_kitchens.back();
+    }
+    return *bestKitchen;
 }
 
 void plazza::Reception::updateKitchenList()
